@@ -1,0 +1,132 @@
+<% layout('/layout/boilerplate') %>
+
+<%=success%>
+<style>
+    #filter{
+display:flex;
+        flex-wrap: wrap;
+        align-items: center;
+        
+    }
+    .filter{
+        text-align: center;
+        margin-left: 1rem;
+        margin-top: 1rem;
+        font-size: medium;
+        opacity: 0.7;
+    }
+    .filter:hover{
+    opacity: 1;
+    cursor: pointer;
+    }
+   .filter i {
+    color: black;   /* or #333 or any color */
+    font-size: 1rem; /* optional */
+}
+.tax-toggle{
+    border: 1px solid black;
+    border-radius: 1rem;
+    height: 3.5rem;
+    padding: 1rem;
+    margin-left: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+</style>
+<body>
+    <div id="filter">
+        <div class="filter">
+            <i class="fa-solid fa-hotel"></i>
+            <p>hotel</p>
+        </div>
+        <div class="filter">
+            <i class="fa-solid fa-mountain-city"></i>
+            <p>mountain_city</p>
+        </div>
+         <div class="filter">
+            <i class="fa-solid fa-bed"></i>
+            <p>bed</p>
+        </div>
+         <div class="filter">
+            <i class="fa-solid fa-door-open"></i>
+            <p>door-open</p>
+        </div>
+         <div class="filter">
+            <i class="fa-solid fa-fire"></i>
+            <p>trending</p>
+        </div>
+         <div class="filter">
+            <i class="fa-brands fa-fort-awesome"></i>
+            <p>castle</p>
+        </div>
+        <div class="filter">
+            <i class="fa-solid fa-campground"></i>
+            <p>camping</p>
+        </div>
+         <div class="filter">
+            <i class="fa-solid fa-money-bill-wheat"></i>
+            <p>farm</p>
+        </div>
+         <div class="filter">
+           <i class="fa-solid fa-snowflake"></i>
+            <p>arctic</p>
+        </div>
+        <div class="filter">
+          <i class="fa-solid fa-person-swimming"></i>
+          <i class="fa-solid fa-building-columns"></i>
+            <p>pool</p>
+        </div>
+        <div class="filter">
+         
+          <i class="fa-solid fa-building-columns"></i>
+            <p>apartment</p>
+        </div>
+        <div class="filter">
+          
+          <i class="fa-solid fa-people-roof"></i>
+            <p>roof</p>
+        </div>
+
+    
+    <div class="tax-toggle">
+    <div class="form-check form-switch form-check-reverse">
+  <input class="form-check-input" type="checkbox" id="switchCheckReverse">
+  <label class="form-check-label" for="switchCheckReverse">Display taxes</label>
+</div>
+</div>
+</div>
+
+    <div class="row row-cols-lg-3 row-cols-md-2">
+        <% allListing.forEach(listing => { %>
+            <a href="/listings/<%= listing._id %>">
+                <div class="card cols listing-card" >
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong><%= listing.title %></strong><br>
+                          &#8377; <%= listing.price.toLocaleString("en-IN")%>
+/night
+<i class="tax-info"> &nbsp; &nbsp;+18%GST</i>                        </p>
+                    </div>
+                </div>
+            </a>
+        <% }) %>
+    </div>
+    <script>
+    const taxSwitch = document.getElementById("switchCheckReverse");
+
+    taxSwitch.addEventListener("change", () => {
+        const taxInfo = document.getElementsByClassName("tax-info");
+
+        for (const info of taxInfo) {
+            if (info.style.display === "inline") {
+                info.style.display = "none";
+            } else {
+                info.style.display = "inline";
+            }
+        }
+    });
+</script>
+
+</body>

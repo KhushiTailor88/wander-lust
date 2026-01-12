@@ -1,0 +1,135 @@
+<% layout('/layout/boilerplate') %>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<body>
+  <h3 class="text-center mt-3 mb-4">Listing Details</h3>
+  <div class="card col-8 offset-2 shadow-lg border-0 rounded-3 mb-4">
+    <img src="<%= listing.image.url %>"
+         class="card-img-top rounded-top"
+         alt="listing_image"
+         height="400px"
+         style="object-fit: cover;" />
+
+    <div class="card-body">
+      <h4 class="card-title fw-bold mb-2"><%= listing.title %></h4>
+      <p class="card-text text-muted mb-1">Owned by <%= listing.owner.username %></p>
+      <p class="card-text"><%= listing.description %></p>
+      <p class="card-text fw-bold text-success">&#8377; <%= listing.price %></p>
+      <p class="card-text"><i class="bi bi-geo-alt-fill text-danger"></i> <%= listing.country %></p>
+    </div>
+  </div>
+
+  <% if (currentUser && currentUser._id.equals(listing.owner._id)) { %>
+
+    <div class="text-center mb-4">
+      <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning me-2">✏️ Edit</a>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" style="display:inline;">
+        <button class="btn btn-danger">🗑️ Delete</button>
+      </form>
+    </div>
+ <%}%>
+
+  <!-- Review Form -->
+  <div class="container mb-5">
+    <h4 class="mb-3">Leave a Review</h4>
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="p-3 border rounded shadow-sm bg-light">
+      <div class="mb-3">
+        <label for="rating" class="form-label fw-bold">Rating</label>
+        <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range">
+      </div>
+
+      <div class="mb-3">
+        <label for="comment" class="form-label fw-bold">Comment</label>
+        <textarea id="comment" name="review[comment]" class="form-control" rows="3" required></textarea>
+      </div>
+
+      <button class="btn btn-dark">Submit Review</button>
+    </form>
+  </div>
+
+  <!-- Reviews Section -->
+  <div class="container mb-5">
+    <h3 class="mb-3">Reviews</h3>
+    <div class="row">
+      <% if (listing.reviews.length === 0) { %>
+        <p class="text-muted">No reviews yet. Be the first to leave one!</p>
+      <% } %>
+
+      <% for (let review of listing.reviews) { %>
+        <div class="col-md-6">
+          <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body">
+              <h6 class="fw-bold">
+                <%= review.author ? review.author.username : "Anonymous" %>
+              </h6>
+              <p class="mb-1"><%= review.comment %></p>
+              <p class="text-warning mb-0">⭐ <%= review.rating %>/5</p>
+
+              <% if (currentUser && currentUser._id.equals(review.author?._id)) { %>
+                <form method="POST" 
+                      action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" 
+                      style="display:inline;">
+                  <button class="btn btn-sm btn-danger mt-2">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="container mb-5">
+    <h3 class="mb-3">Here you'll be</h3>
+    <div id="map"></div>
+  </div>
+
+  <style>
+    #map {
+      width: 100%;
+      height: 450px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      border: 2px solid #ddd;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px;
+      padding: 5px;
+    }
+    .leaflet-popup-content {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+
+  <script>
+    const lat = 40.0;
+    const lng = -74.5;
+
+    const map = L.map('map').setView([lat, lng], 10);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap contributors &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
+
+    const customIcon = L.icon({
+      iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+      iconSize: [35, 35],
+      iconAnchor: [17, 34],
+      popupAnchor: [0, -28]
+    });
+
+    L.marker([lat, lng], { icon: customIcon })
+      .addTo(map)
+      .bindPopup(`<b><%= listing.title %></b><br><%= listing.country %>`)
+      .openPopup();
+  </script>
+</body>

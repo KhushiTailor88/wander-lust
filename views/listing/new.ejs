@@ -1,0 +1,55 @@
+<% layout('/layout/boilerplate') %>
+<body>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+        
+        <!-- Title -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input placeholder="your title" name="listing[title]" type="text" class="form-control" required>
+          <div class="valid-feedback">Looks good</div>
+          <div class="invalid-feedback">Please enter a title</div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="textarea" class="form-label">Description</label>
+          <textarea name="listing[description]" class="form-control" required>write your description</textarea>
+          <div class="invalid-feedback">Write a short description</div>
+        </div> 
+
+        <!-- Image -->
+        <div class="mb-3">
+          <label for="image" class="form-label">Image</label>
+          <input type="file" name="listing[image]" class="form-control">
+        </div>
+
+        <!-- Price & Location -->
+        <div class="row">
+          <div class="mb-3 col-4">
+            <label for="price" class="form-label">Price</label>
+            <input placeholder="your price" name="listing[price]" type="number" required class="form-control">
+            <div class="invalid-feedback">Price should be valid</div>
+          </div>
+          <div class="mb-3 col-8">
+            <label for="location" class="form-label">Location</label>
+            <input placeholder="your location" name="listing[location]" type="text" class="form-control" required>
+            <div class="valid-feedback">Looks good</div>
+            <div class="invalid-feedback">Please enter a location</div>
+          </div>
+        </div>
+
+        <!-- Country -->
+        <div class="mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input placeholder="your country" name="listing[country]" type="text" class="form-control" required>
+          <div class="invalid-feedback">Please enter a country</div>
+        </div>
+
+        <!-- Submit -->
+        <button class="btn btn-dark">ADD</button>
+      </form>
+    </div>
+  </div>
+</body>
