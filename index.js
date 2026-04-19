@@ -12,10 +12,10 @@ const ejsmate = require("ejs-mate");
 const joi = require("joi");
 const methodOverride = require("method-override");
 const path = require("path");
-const listingsroutes =require("./routes/listing.js");
+const listingsroutes = require("./routes/listing.js");
 
-const reviewsroutes =require("./routes/review.js");
-const usersroutes =require("./routes/user.js");
+const reviewsroutes = require("./routes/review.js");
+const usersroutes = require("./routes/user.js");
 
 const session = require("express-session");
 const flash = require('connect-flash');
@@ -27,8 +27,8 @@ const wrapAsync = require("./inities/wrapAsync");
 const ExpressError = require("./inities/ExpressError");
 const Listing = require("./models/listing.js");
 const Review = require("./models/review.js");
-const User = require("./models/user.js"); 
-const{listingSchema ,reviewSchema}=require("./Schema.js");// not used yet
+const User = require("./models/user.js");
+const { listingSchema, reviewSchema } = require("./Schema.js");// not used yet
 
 // Middleware setup
 app.engine("ejs", ejsmate);
@@ -40,14 +40,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 
 app.use(session({
-    secret:process.env.SECRET,
-    resave: true,
-    saveUninitialized: false ,
-    cookie:{
-expire:Date.now()+7*24*60*60*1000,
-maxAge:7*24*60*60*1000,
-httpOnly:true,
-    }  
+  secret: process.env.SECRET,
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    expire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  }
 }));
 
 app.use(flash());
@@ -59,21 +59,23 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next)=>{
-  res.locals.success=req.flash("success");
-  res.locals.error=req.flash("error");
-   res.locals.currentuser=req.user;
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.currentuser = req.user;
   next();
 })
 
 app.get("/demoregister", async (req, res) => {
-  const fakeUser = new User({ username: "khushi", 
-    email: "khushi566" });
+  const fakeUser = new User({
+    username: "khushi",
+    email: "khushi566"
+  });
   const registeredUser = await User.register(fakeUser, "helloworld");
   res.send(registeredUser);
 });
-app.use("/",usersroutes);
-app.use("/listings",listingsroutes);
+app.use("/", usersroutes);
+app.use("/listings", listingsroutes);
 app.use("/listings/:id/reviews", reviewsroutes);
 
 //app.use("/listings/:id/reviews",reviewsroutes);
