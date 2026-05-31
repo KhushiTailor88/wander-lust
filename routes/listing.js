@@ -7,8 +7,8 @@ const{listingSchema ,reviewSchema}=require("../Schema.js");
 const {islogin} = require("../middleware.js");
 const listingController = require("../controller/listing.js");
 const multer  = require('multer');
-const storage=require("../config.js")
-const upload = multer(storage);
+const { storage } = require("../config.js");
+const upload = multer({ storage });
 
 router.route("/")
 .get( wrapAsync(listingController.index)).

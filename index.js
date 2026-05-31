@@ -108,7 +108,11 @@ async function main() {
 
 // Home route
 app.get("/", (req, res) => {
-  res.send("root is working ✅");
+  res.redirect("/listings");
+});
+
+app.get("/listing", (req, res) => {
+  res.redirect("/listings");
 });
 
 //Test route (for sample data)
