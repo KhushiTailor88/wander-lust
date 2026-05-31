@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 
 app.use(session({
-  secret: process.env.SECRET,
+  secret: sessionSecret,
   resave: true,
   saveUninitialized: false,
   cookie: {
@@ -82,7 +82,8 @@ app.use("/listings/:id/reviews", reviewsroutes);
 //app.use("/listings/:id/reviews",reviewsroutes);
 
 
-const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.MONGO_URL || process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+const sessionSecret = process.env.SECRET || "thisshouldbeabettersecret";
 
 // ✅ DB Connection
 main()
