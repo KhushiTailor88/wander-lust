@@ -81,21 +81,27 @@ app.use("/listings/:id/reviews", reviewsroutes);
 //app.use("/listings/:id/reviews",reviewsroutes);
 
 
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+
 // ✅ DB Connection
 main()
   .then(() => {
     console.log("✅ Connected to DB");
-    app.listen(8080, () => {
-      console.log("🚀 Server listening on port 8080");
-    });
+    if (process.env.NODE_ENV !== "production") {
+      app.listen(8080, () => {
+        console.log("🚀 Server listening on port 8080");
+      });
+    }
   })
   .catch((err) => {
     console.error("❌ DB connection error:", err);
   });
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+  await mongoose.connect(dbUrl);
 }
+
+module.exports = app;
 
 // ---------------- ROUTES ---------------- //
 
