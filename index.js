@@ -38,6 +38,9 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+const sessionSecret = process.env.SECRET || process.env.SESSION_SECRET || "thisshouldbeabettersecret";
+const dbUrl = process.env.MONGO_URL || process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+
 app.use(methodOverride("_method"));
 
 app.use(session({
@@ -80,10 +83,6 @@ app.use("/listings", listingsroutes);
 app.use("/listings/:id/reviews", reviewsroutes);
 
 //app.use("/listings/:id/reviews",reviewsroutes);
-
-
-const dbUrl = process.env.MONGO_URL || process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
-const sessionSecret = process.env.SECRET || "thisshouldbeabettersecret";
 
 // ✅ DB Connection
 main()
