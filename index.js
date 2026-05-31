@@ -21,6 +21,7 @@ const session = require("express-session");
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const MongoStore = require('connect-mongo');
 
 
 const wrapAsync = require("./inities/wrapAsync");
@@ -101,7 +102,7 @@ async function main() {
   await mongoose.connect(dbUrl);
 }
 
-module.exports = app;
+// ✅ DB Connection (Removed module.exports = app from here)
 
 // ---------------- ROUTES ---------------- //
 
@@ -128,3 +129,5 @@ app.use((err, req, res, next) => {
   const { statusCode = 500, message = "Something went wrong" } = err;
   res.status(statusCode).send(message);
 });
+
+module.exports = app;
