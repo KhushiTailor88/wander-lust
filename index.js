@@ -1,8 +1,20 @@
-if (process.env.NODE_ENV !== "production") {
+if (process.env.VERCEL !== "1" && process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-console.log("DEBUG ENV:", process.env.CLOUD_NAME, process.env.CLOUD_API_KEY, process.env.CLOUD_API_SECRET);
+console.log(
+  "DEBUG ENV:",
+  process.env.CLOUD_NAME,
+  process.env.CLOUD_API_KEY,
+  process.env.CLOUD_API_SECRET
+);
+console.log(
+  "NODE_ENV:", process.env.NODE_ENV,
+  "VERCEL:", process.env.VERCEL,
+  "VERCEL_ENV:", process.env.VERCEL_ENV,
+  "MONGO_URL:", process.env.MONGO_URL ? "set" : "missing",
+  "SECRET:", process.env.SECRET ? "set" : "missing"
+);
 
 
 const express = require("express");
@@ -130,8 +142,16 @@ app.get("/testListing", wrapAsync(async (req, res) => {
 
 //Error middleware
 app.use((err, req, res, next) => {
+  console.error(err);
   const { statusCode = 500, message = "Something went wrong" } = err;
   res.status(statusCode).send(message);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
+});
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
 });
 
 module.exports = app;
