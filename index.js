@@ -1,20 +1,33 @@
-if (process.env.VERCEL !== "1" && process.env.NODE_ENV !== "production") {
+const isLocal = process.env.VERCEL !== "1" && process.env.NODE_ENV !== "production";
+if (isLocal) {
   require("dotenv").config();
 }
 
+const dbUrl = process.env.MONGO_URL || process.env.ATLASDB_URL || process.env.DATABASE_URL || process.env.MONGODB_URI || (isLocal ? "mongodb://127.0.0.1:27017/wanderlust" : undefined);
+const sessionSecret = process.env.SECRET || process.env.SESSION_SECRET || process.env.SESSIONSECRET || (isLocal ? "thisshouldbeabettersecret" : undefined);
+
 console.log(
   "DEBUG ENV:",
-  process.env.CLOUD_NAME,
-  process.env.CLOUD_API_KEY,
-  process.env.CLOUD_API_SECRET
+  process.env.CLOUD_NAME || "missing",
+  process.env.CLOUD_API_KEY || "missing",
+  process.env.CLOUD_API_SECRET || "missing"
 );
 console.log(
-  "NODE_ENV:", process.env.NODE_ENV,
-  "VERCEL:", process.env.VERCEL,
-  "VERCEL_ENV:", process.env.VERCEL_ENV,
-  "MONGO_URL:", process.env.MONGO_URL ? "set" : "missing",
-  "SECRET:", process.env.SECRET ? "set" : "missing"
+  "NODE_ENV:", process.env.NODE_ENV || "missing",
+  "VERCEL:", process.env.VERCEL || "missing",
+  "VERCEL_ENV:", process.env.VERCEL_ENV || "missing",
+  "DB_URL:", dbUrl ? "set" : "missing",
+  "SESSION_SECRET:", sessionSecret ? "set" : "missing"
 );
+
+if (!isLocal) {
+  const missing = [];
+  if (!dbUrl) missing.push("DB connection URL (MONGO_URL / ATLASDB_URL / DATABASE_URL / MONGODB_URI)");
+  if (!sessionSecret) missing.push("SESSION secret (SECRET / SESSION_SECRET)");
+  if (missing.length) {
+    throw new Error(`Missing production environment variables: ${missing.join(", ")}`);
+  }
+}
 
 
 const express = require("express");
@@ -50,8 +63,6 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-const sessionSecret = process.env.SECRET || process.env.SESSION_SECRET || "thisshouldbeabettersecret";
-const dbUrl = process.env.MONGO_URL || process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
 
 app.use(methodOverride("_method"));
 
