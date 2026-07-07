@@ -1,0 +1,6 @@
+Server spawn initiated...
+[dotenv@17.2.2] injecting env (8) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+DEBUG ENV: duylzx9hu 952771968597998 2CNLFj-QzppW_98zW9u_WQZ2URA
+NODE_ENV: development VERCEL: missing VERCEL_ENV: missing DB_URL: set SESSION_SECRET: set
+✅ Connected to DB
+🚀 Server listening on port 8080
