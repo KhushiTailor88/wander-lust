@@ -32,16 +32,16 @@ module.exports.showlisting = async (req, res) => {
 };
 
 
-module.exports.createnewlisting =async (req, res) => {
-  let url = req.file.path;
-  let filename=req.file.filename;
+module.exports.createnewlisting = async (req, res) => {
+  let url = req.file ? req.file.path : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60";
+  let filename = req.file ? req.file.filename : "listingimage";
 
   let listingdata = new Listing(req.body.listing);
-  listingdata.owner =req.user._id;
-  listingdata.image={url,filename};
+  listingdata.owner = req.user._id;
+  listingdata.image = { url, filename };
   await listingdata.save();
   
-  req.flash("success","create  new listing successfully");
+  req.flash("success", "create  new listing successfully");
   res.redirect("/listings");
 }
 

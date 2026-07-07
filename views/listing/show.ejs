@@ -16,7 +16,7 @@
         <h4 class="card-title fw-bold mb-2">
           <%= listing.title %>
         </h4>
-        <p class="card-text text-muted mb-1">Owned by <%= listing.owner.username %>
+        <p class="card-text text-muted mb-1">Owned by <%= listing.owner ? listing.owner.username : "Unknown Owner" %>
         </p>
         <p class="card-text">
           <%= listing.description %>
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <% if (currentUser && currentUser._id.equals(listing.owner._id)) { %>
+    <% if (currentUser && listing.owner && currentUser._id.equals(listing.owner._id)) { %>
 
       <div class="text-center mb-4">
         <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning me-2">✏️ Edit</a>
