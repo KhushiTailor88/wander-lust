@@ -11,10 +11,8 @@ const { storage } = require("../config.js");
 const upload = multer({ storage });
 
 router.route("/")
-.get( wrapAsync(listingController.index)).
-post( islogin, upload.single("listing[image]"),
-wrapAsync(listingController.createnewlisting),
- );
+.get(wrapAsync(listingController.index))
+.post(islogin, upload.fields([{ name: "image", maxCount: 1 }, { name: "listing[image]", maxCount: 1 }]), wrapAsync(listingController.createnewlisting));
 
 //wrapAsync(listingController.createnewlisting)
 //(req,res)=>{
@@ -27,9 +25,8 @@ router.get("/new", islogin,listingController.newform);
 
 // Show
 router.route("/:id")
-.get( wrapAsync(listingController.showlisting))
-.put( islogin, wrapAsync(listingController.updatelisting));
-
+.get(wrapAsync(listingController.showlisting))
+.put(islogin, upload.fields([{ name: "image", maxCount: 1 }, { name: "listing[image]", maxCount: 1 }]), wrapAsync(listingController.updatelisting));
 
 //Edit form
 router.get("/:id/edit", wrapAsync(listingController.editlisting));

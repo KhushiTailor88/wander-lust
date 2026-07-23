@@ -61,12 +61,35 @@ justify-content: center;
     margin-bottom: 1rem;
 }
 
-.card-img-top{
+.detail-card {
+    margin: 2.5rem auto 3rem;
+    max-width: 900px;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+}
+
+.detail-card .card-body {
+    padding: 1.75rem !important;
+    text-align: center;
+}
+
+.detail-card .card-title,
+.detail-card .card-text {
+    text-align: center;
+}
+
+.detail-card .card-text i {
+    display: inline-block;
+}
+
+.card-img-top {
     border-radius: 1rem !important;
     width:100%;
     object-fit: cover !important;
 }
-.card-body{
+
+.card-body {
     padding: 0% !important;
 }
 
